@@ -62,13 +62,13 @@
           e.preventDefault();
           debugger;
           const target = e.target;
-          target.reset();
+          
 
           const data = {
             name: target.name.value,
             email: target.email.value,
           };
-
+          target.reset();
           // if (!data.email || userData[data.email]) {
           //     alert('Duplicate or empty records');
           //     return

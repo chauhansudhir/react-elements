@@ -87,17 +87,21 @@ export default () => {
   const formAttrs = useMemo(() => ({}), [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-      <div style={{ flex: 1 }}>
-        <FormDataContext.Provider value={data} >
-          <FormBuilder config={FORM_CONFIG} formAttrs={formAttrs} componentMap={COMPONENTS_MAP} onChange={onChange} onSubmit={onSubmit} />
-        </FormDataContext.Provider >
-      </div>
-      <div style={{ width: 10 }}></div>
-      <div>
-        <pre>
-          {JSON.stringify(data, null, 4)}
-        </pre>
+    <div>
+      <h1 style={{ color: '#000' }}>Form Builder</h1>
+
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+        <div style={{ flex: 1 }}>
+          <FormDataContext.Provider value={data} >
+            <FormBuilder config={FORM_CONFIG} formAttrs={formAttrs} componentMap={COMPONENTS_MAP} onChange={onChange} onSubmit={onSubmit} />
+          </FormDataContext.Provider >
+        </div>
+        <div style={{ width: 10 }}></div>
+        <div>
+          <pre>
+            {JSON.stringify(data, null, 4)}
+          </pre>
+        </div>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
-# DEMO: Form Builder
+# DEMO: Javascript and React Examples
 
-- https://chauhansudhir.github.io/react-elements/form-builder/
+- React Form Builder: https://chauhansudhir.github.io/react-elements/form-builder/
+- Vanila Javascript Form: https://chauhansudhir.github.io/react-elements/form-builder/

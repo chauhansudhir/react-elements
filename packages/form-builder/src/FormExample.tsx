@@ -1,8 +1,8 @@
-import { SyntheticEvent, useCallback, useMemo, useReducer, useState } from "react";
+import { SyntheticEvent, useCallback, useMemo, useReducer } from "react";
 import { FormDataContext } from "./formContexts";
 import FormBuilder from "./FormBuilder";
 import { FORM_CONFIG } from "./config";
-import { TChangeEventType, TComponentMap, TFormData } from "./typesFormBuilder";
+import { TChangeEventType, TComponentMap, TFormConfig, TFormData } from "./typesFormBuilder";
 
 const COMPONENTS_MAP = {};
 
@@ -12,23 +12,29 @@ const DEFAULT_VALUES: TFormData = {
   gender: 'male',
   sports: ['volleyball'],
   pet: "dog",
-  description: "test desc"
+  description: "test desc",
+  valid_status: false
 }
 
 function reducer(state: TFormData, action: any) {
   switch (action.type) {
     case 'update': {
       const oldValue = state
-      const { name, type, value, checked } = action.payload;
+      const { name, type, value, checked, multiple } = action.payload;
+
       if (type === 'checkbox') {
-        oldValue[name] ||= [];
-        let values = oldValue[name];
-        if (checked) {
-          values.push(value)
+        if (multiple) {
+          oldValue[name] ||= [];
+          let values = oldValue[name] as Array<string | number>;
+          if (checked) {
+            values.push(value)
+          } else {
+            values = values.filter(x => x !== value);
+          }
+          oldValue[name] = [...new Set(values)];
         } else {
-          values = values.filter(x => x !== value);
+          oldValue[name] = checked ? value : '';
         }
-        oldValue[name] = [...new Set(values)]
       } else {
         oldValue[name] = value
       }
@@ -44,25 +50,28 @@ function useFormState() {
 
   const [data, dispatch] = useReducer(reducer, DEFAULT_VALUES);
 
-  const setData = useCallback(({ target }: TChangeEventType): void => {
-    const { name, value, type, checked } = target as TComponentMap;
+  const updateData = useCallback((e: TChangeEventType, conf?: TFormConfig): void => {
+
+    const { name, value, type, checked } = e.target as TComponentMap;
+    const multiple: boolean = conf?.multiple === true;
+
     dispatch({
       type: 'update',
-      payload: { name, value, type, checked }
+      payload: { name, value, type, checked, multiple }
     });
   }, []);
 
-  return [data, setData];
+  return { data, updateData };
 }
 
 
 
 
 export default () => {
-  const [data, setData] = useFormState();
+  const { data, updateData } = useFormState();
 
-  const onChange = useCallback((e: TChangeEventType) => {
-    setData(e)
+  const onChange = useCallback((e: TChangeEventType, conf?: TFormConfig) => {
+    updateData(e, conf)
   }, [])
 
   const onSubmit = useCallback((e: SyntheticEvent<HTMLFormElement>) => {

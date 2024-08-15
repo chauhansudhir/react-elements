@@ -1,4 +1,4 @@
-import { IFormBuilder, TFormConfig } from "./typesFormBuilder";
+import { TFormConfig } from "./typesFormBuilder";
 
 export const FORM_CONFIG: TFormConfig = {
   element: "div",
@@ -84,6 +84,7 @@ export const FORM_CONFIG: TFormConfig = {
             {
               element: "input",
               label: "Volleyball",
+              multiple: true,
               attrs: {
                 type: "checkbox",
                 value: "volleyball",
@@ -94,6 +95,7 @@ export const FORM_CONFIG: TFormConfig = {
             {
               element: "input",
               label: "Basketball",
+              multiple: true,
               attrs: {
                 type: "checkbox",
                 value: "basketball",
@@ -106,11 +108,21 @@ export const FORM_CONFIG: TFormConfig = {
       ],
     },
     {
+      element: "input",
+      label: "Is it Valid?",
+      attrs: {
+        type: "checkbox",
+        value: "yes",
+        name: "valid_status",
+        id: "valid_status",
+      },
+    },
+    {
       element: "select",
       label: "Choose a pet",
       attrs: { name: "pet", id: "pet" },
       options: [
-        { label: "", value: "--Please choose an option--" },
+        { label: "--Please choose an option--", value: "" },
         { label: "Dog", value: "dog" },
         { label: "Cat", value: "cat" },
         { label: "Hamster", value: "hamster" },

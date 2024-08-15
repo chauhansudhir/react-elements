@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, useCallback, useMemo } from "react";
+import { ForwardedRef, forwardRef, useCallback } from "react";
 import TextBox from "./components/TextBox";
 import Label from "./components/Label";
 import Select from "./components/Select";
@@ -21,7 +21,7 @@ const getElement = (elementName: string, componentMap: TComponentMap = {}) => {
 const FormElement: React.FC<Partial<IFormBuilder>> = ({ config, onChange, componentMap }: Partial<IFormBuilder>) => {
   if (!config || !config.element) return null;
 
-  const { element, elements = [], attrs = {}, options = [], ...compProps } = config;
+  const { element, elements = [] } = config;
 
   const CustomComp = getElement(element, componentMap);
   const Component = (CustomComp || element);
@@ -44,8 +44,8 @@ const FormElement: React.FC<Partial<IFormBuilder>> = ({ config, onChange, compon
 const FormBuilder: React.FC<IFormBuilder> = forwardRef<HTMLFormElement, IFormBuilder>((props: IFormBuilder, ref: ForwardedRef<HTMLFormElement>) => {
   const { config, formAttrs, onChange, onSubmit, componentMap } = props;
 
-  const onDataChange = useCallback((e: TChangeEventType) => {
-    onChange(e)
+  const onDataChange = useCallback((e: TChangeEventType, conf?: TFormConfig) => {
+    onChange ? onChange(e, conf) : null;
   }, [config]);
 
   return (

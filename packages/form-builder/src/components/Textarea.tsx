@@ -7,8 +7,12 @@ const Textarea: React.FC<IFormBuilder> = ({ config, onChange, ...rest }: Omit<IF
 
     const { label, attrs } = config;
 
-    const inputAtrs = attrs || {};
-    const { id, name, value } = inputAtrs;
+    const inputAtrs = (attrs || {});
+
+    const value = inputAtrs;
+    const id = inputAtrs.id as string;
+    const name = inputAtrs.name as string;
+
 
     const userInput = (data[id] || data[name] || value) as string;
 

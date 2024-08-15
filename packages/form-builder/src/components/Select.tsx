@@ -18,12 +18,18 @@ const Select: React.FC<IFormBuilder> = ({
   const data = useContext<TFormData>(FormDataContext);
 
   const inputAtrs = attrs || {}
-  const { id, name } = inputAtrs;
+  const id = inputAtrs.id as string;
+  const name = inputAtrs.name as string;
 
   const selected = (data[id] || data[name] || (attrs?.multiple ? [] : '')) as Array<string | number> | string | number;
 
   const isSelected = (value: string | number) => {
-    return attrs.multiple ? Array.isArray(selected) ? selected.includes(value) : false : selected === value;
+
+    if (Array.isArray(selected)) {
+      return selected.includes(value);
+    } else {
+      return selected === value;
+    }
   }
 
   return (

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <style>
+      .submit-button {
+        background-color: #6f70ff;
+        padding: 10px 15px;
+        border: 0px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(2, 50%);
+        border-bottom: 1px solid #000;
+        padding: 7px;
+      }
+      .grid {
+        border-radius: 5px;
+        margin: 10px;
+        padding: 2rem;
+        background-color: rgb(182, 232, 200);
+        color: #000;
+      }
+      .form-elem {
+        padding: 5px 0px;
+      }
+      .form-elem label {
+        font-weight: 900;
+      }
+      .form-elem input {
+        width: 500px;
+        line-height: 25px;
+      }
+      .user-entries {
+        display: none;
+      }
+      .html-js {
+        width: 800px;
+      }
+    </style>
+    <script>
+        const FORM_CONTROL = ".user-form";
+
+        const USER_ENTRIES = ".user-entries";
+        const USER_ENTRIES_RESULT = ".user-entries .grid";
+
+        let userData = {};
+
+        function createElem(type, attrs = {}) {
+          const elem = document.createElement(type);
+
+          for (const key in attrs) {
+            elem.setAttribute(key, attrs[key]);
+          }
+          return elem;
+        }
+
+        function handleSubmit(e) {
+          e.preventDefault();
+          debugger;
+          const target = e.target;
+          target.reset();
+
+          const data = {
+            name: target.name.value,
+            email: target.email.value,
+          };
+
+          // if (!data.email || userData[data.email]) {
+          //     alert('Duplicate or empty records');
+          //     return
+          // }
+
+          userData[data.email] = data;
+          addItems(data);
+        }
+
+        function addItems(userData) {
+          const element = createElem("div", { class: "row" });
+          const name = createElem("div");
+          const email = createElem("div", { class: userData.email });
+
+          name.appendChild(document.createTextNode(userData.name));
+          email.appendChild(document.createTextNode(userData.email));
+          element.append(name, email);
+
+          // add it to the page
+          const result = document.querySelector(USER_ENTRIES_RESULT);
+          result.append(element);
+          submitBatch();
+        }
+
+        function handlFinalSubmit() {
+          // fetch(/user, {}).then()
+          userData = {};
+
+          const result = document.querySelector(USER_ENTRIES_RESULT);
+          result.innerHTML = "";
+        }
+
+        function submitBatch() {
+          const keys = Object.values(userData);
+
+          if (keys.length !== 1) {
+            return false;
+          }
+
+          const resultView = document.querySelector(USER_ENTRIES);
+          resultView.style.display = "block";
+
+          const userEntries = document.querySelector(USER_ENTRIES);
+          const button = createElem("button");
+          button.append(document.createTextNode("Final Submit"));
+
+          button.addEventListener("click", handlFinalSubmit);
+          userEntries.append(button);
+        }
+
+        function init() {
+          const form = document.querySelector(FORM_CONTROL);
+          form.addEventListener("submit", handleSubmit);
+        }
+
+        window.addEventListener("load", init);
+      </script>
+  </head>
+  <body>
+    
+    <div class="html-js">
+      <h1>Vanila Javascript Form Submit</h1>
+      <form class="user-form">
+        <div class="form-elem">
+          <label>Name</label>
+          <input type="text" name="name" />
+        </div>
+        <div class="form-elem">
+          <label>Email</label>
+          <input type="text" name="email" />
+        </div>
+
+        <div class="form-elem">
+          <button type="submit" class="submit-button">Submit</button>
+        </div>
+      </form>
+
+      <div class="user-entries">
+        <div class="grid">
+          <div class="row header">
+            <div>Name</div>
+            <div>Email</div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </body>
+</html>

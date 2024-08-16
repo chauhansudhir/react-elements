@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useMemo, useReducer } from "react";
+import { useCallback, useMemo, useReducer } from "react";
 import { FormDataContext } from "./formContexts";
 import FormBuilder from "./FormBuilder";
 import { FORM_CONFIG } from "./config";

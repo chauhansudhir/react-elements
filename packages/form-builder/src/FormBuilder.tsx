@@ -51,12 +51,12 @@ const FormBuilder: React.FC<IFormBuilder> = forwardRef<HTMLFormElement, IFormBui
   const handleFormSubmit = useCallback((e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData();
-    const target = e.target;
-    const elements = (target?.elements || [])
+    const target = e.target as HTMLFormElement;
+    const elements = target?.elements
 
     for (let i = 0; i < elements.length; i++) {
       const elem = elements[i];
-      const { name, value, checked, type } = elem;
+      const { name, value, checked, type } = elem as HTMLInputElement;
 
       switch (type) {
         case 'checkbox':

@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, useCallback } from "react";
+import { ForwardedRef, forwardRef, SyntheticEvent, useCallback } from "react";
 import TextBox from "./components/TextBox";
 import Label from "./components/Label";
 import Select from "./components/Select";
@@ -48,8 +48,36 @@ const FormBuilder: React.FC<IFormBuilder> = forwardRef<HTMLFormElement, IFormBui
     onChange ? onChange(e, conf) : null;
   }, [config]);
 
+  const handleFormSubmit = useCallback((e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData();
+    const target = e.target;
+    const elements = (target?.elements || [])
+
+    for (let i = 0; i < elements.length; i++) {
+      const elem = elements[i];
+      const { name, value, checked, type } = elem;
+
+      switch (type) {
+        case 'checkbox':
+        case 'radio':
+          checked ? form.append(name, value) : null
+          break;
+        case 'select-one':
+        case 'textarea':
+          form.append(name, value)
+          break;
+
+      }
+      form.append(name, value);
+    }
+
+
+    onSubmit ? onSubmit(form) : null;
+  }, [config])
+
   return (
-    <form {...formAttrs} onSubmit={onSubmit} ref={ref}>
+    <form {...formAttrs} onSubmit={handleFormSubmit} ref={ref}>
       <FormElement config={config} componentMap={componentMap} onChange={onDataChange} />
     </form>
   )

@@ -65,8 +65,6 @@ function useFormState() {
 }
 
 
-
-
 export default () => {
   const { data, updateData } = useFormState();
 
@@ -74,14 +72,11 @@ export default () => {
     updateData(e, conf)
   }, [])
 
-  const onSubmit = useCallback((e: SyntheticEvent<HTMLFormElement>) => {
-
-    e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
+  const onSubmit = useCallback((form: FormData) => {
     const firstName = form.get('first_name');
     const lastname = form.get('last_name')
     const gender = form.get('gender')
-    console.log(firstName, lastname, gender)
+    console.log({ firstName, lastname, gender })
   }, []);
 
   const formAttrs = useMemo(() => ({}), [])

@@ -153,6 +153,87 @@
         }
 
         window.addEventListener("load", init);
+
+        const reviews = [
+          ["Alice", "Frozen", 5],
+          ["Alice", "Lost In Translation", 1],
+          ["Bob", "Mad Max", 5],
+          ["Bob", "All About Eve", 3],
+          ["Bob", "Lost In Translation", 5],
+          ["Charlie", "Lost In Translation", 4],
+          ["Charlie", "Inception", 4],
+          ["Charlie", "Topsy-Turvy", 2],
+          ["Dennis", "All About Eve", 5],
+          ["Dennis", "Mad Max", 4],
+          ["Dennis", "Topsy-Turvy", 4],
+          ["Franz", "Lost In Translation", 5],
+          ["Franz", "Mad Max", 5],
+        ];
+
+        // hardcoded
+        // function suggest(name, reviews) {
+        //   const movieToUser = {};
+        //   const userMovies = reviews.reduce((acc, row) => {
+        //     acc[row[0]] ||= {};
+        //     acc[row[0]][row[2]] ||= [];
+        //     acc[row[0]][row[2]].push(row[1]);
+
+        //     movieToUser[row[1]] ||= {};
+        //     movieToUser[row[1]][row[2]] ||= [];
+        //     movieToUser[row[1]][row[2]].push(row[0]);
+        //     return acc;
+        //   }, {});
+        //   // console.log(userMovies, movieToUser);
+        //   const charlieReviews = userMovies[name];
+        //   const charlieFirstMove = charlieReviews[5] || charlieReviews[4];
+
+        //   for (const m of charlieFirstMove) {
+        //     const sameUser = movieToUser[m];
+        //     const sameUserRating = sameUser[5] || sameUser[4];
+        //     const sameUserRatedMovies = userMovies[sameUserRating[0]];
+        //     const moviews = sameUserRatedMovies[5] || sameUserRatedMovies[4];
+        //     if (moviews && moviews.length) {
+        //       return moviews[0];
+        //     }
+        //   }
+        // }
+        // const match = suggest("Charlie", reviews);
+        // console.log(match === "Mad Max");
+        // optmized
+        function suggest(name, reviews) {
+          // Get movies the user has already reviewed
+          const userMovies = new Set(
+            reviews.filter((r) => r[0] === name).map((r) => r[1])
+          );
+
+          // Collect movies rated 4 or 5 by other users and not reviewed by the user
+          const recommendations = {};
+          reviews.forEach(([user, movie, rating]) => {
+            if (rating >= 4 && !userMovies.has(movie) && user !== name) {
+              if (!recommendations[movie]) recommendations[movie] = [];
+              recommendations[movie].push(rating);
+            }
+          });
+
+          // Filter out movies with only a single review to avoid bias
+          const filteredRecommendations = Object.entries(
+            recommendations
+          ).filter(([movie, ratings]) => ratings.length > 1);
+
+          // Rank movies based on average rating
+          const rankedMovies = filteredRecommendations
+            .map(([movie, ratings]) => ({
+              movie,
+              avgRating: ratings.reduce((a, b) => a + b, 0) / ratings.length,
+            }))
+            .sort((a, b) => b.avgRating - a.avgRating);
+
+          // Return the top-rated movie
+          return rankedMovies.length > 0 ? rankedMovies[0].movie : null;
+        }
+
+        const match = suggest("Charlie", reviews);
+        console.log(match); // Expected output: "Mad Max"
       </script>
     </div>
   </body>

@@ -43,7 +43,7 @@ export interface IFormBuilder {
   config: TFormConfig;
   formAttrs: { [key: string]: string | object | number };
   onChange?: (e: TChangeEventType, config?: TFormConfig) => void;
-  onSubmit?: (e: SyntheticEvent<HTMLFormElement>) => void | boolean;
+  onSubmit?: (e: FormData) => void | boolean;
   componentMap: TComponentMap;
 }
 
